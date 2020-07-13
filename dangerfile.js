@@ -1,10 +1,14 @@
-import { danger, fail} from 'danger'
+import { danger, fail, warn } from 'danger'
 
-const currentMrAuthor = danger.gitlab.mr.author.username
-const { modified_files, created_files, deleted_files } = danger.git
-const allChangedFiles = [...modified_files, ...created_files, ...deleted_files]
+fail('This is a failure message')
 
-const webAppFile = allChangedFiles.find(x=>x.indexOf('/web-app/')>-1)
-if(webAppFile!==undefined && currentMrAuthor==='twomeetings1'){
-  fail(`你没有权限提交代码到'web-app'项目，请先撤销相应文件修改，再尝试Merge Request的合并`)
+warn('This is a warn message')
+
+const { title } = danger.github.pr
+
+if (!title.startsWith('feature/')) {
+	fail('标题必须要由"feature/"开头')
 }
+
+// console.warn('=== danger.github:')
+console.warn(JSON.stringify(danger.github.pr))
